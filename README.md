@@ -27,7 +27,7 @@ $ npm run watch
 ```
 
 ### To access server situated outside kgp campus
-Follow this [app](kubs.herokuapp.com)
+Follow this [app](https://kubs.herokuapp.com)
 
 
 
