@@ -131,7 +131,7 @@ app.get('/reauth', function (req, res, next) {
   res.status(401).send('<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=' + r + '"></head><body bgcolor="#000"></body></html>')
 })
 
-app.get('/ssh/host/:host?', function (req, res, next) {
+app.get('/:host?', function (req, res, next) {
   res.sendFile(path.join(path.join(publicPath, 'client.htm')))
   // capture, assign, and validated variables
   req.session.ssh = {
