@@ -10,6 +10,8 @@ var publicPath = path.join(nodeRoot, 'client', 'public')
 console.log('WebSSH2 service reading config from: ' + configPath)
 var express = require('express')
 var logger = require('morgan')
+var bodyParser = require('body-parser');
+
 
 // sane defaults if config.json or parts are missing
 let config = {
@@ -119,7 +121,30 @@ var expressOptions = require('./expressOptions')
 // express
 app.use(compression({ level: 9 }))
 app.use(session)
-app.use(myutil.basicAuth)
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
+
+app.get('/', function(request, response) {
+	response.sendFile(path.join(__dirname + '/../views/login.html'));
+});
+
+app.post('/auth', function(req, res) {
+	var host = req.body.host;
+	var username = req.body.username;
+	var password = req.body.password;
+	if (username && password) {
+    req.session.username = username;
+    req.session.userpassword = password;
+    res.redirect('/ssh/' + host);
+	} else {
+		res.send('Please enter Username and Password!');
+		res.end();
+	}
+});
+
+
+
+//app.use(myutil.basicAuth)
 if (config.accesslog) app.use(logger('common'))
 app.disable('x-powered-by')
 
@@ -131,7 +156,7 @@ app.get('/reauth', function (req, res, next) {
   res.status(401).send('<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=' + r + '"></head><body bgcolor="#000"></body></html>')
 })
 
-app.get('/:host?', function (req, res, next) {
+app.get('/ssh/:host?', function (req, res, next) {
   res.sendFile(path.join(path.join(publicPath, 'client.htm')))
   // capture, assign, and validated variables
   req.session.ssh = {
