@@ -68,17 +68,6 @@ module.exports = function socket (socket) {
           }
         }
       })
-      socket.on('control', function socketOnControl (controlData) {
-        switch (controlData) {
-          case 'replayCredentials':
-            if (socket.request.session.ssh.allowreplay) {
-              stream.write(socket.request.session.userpassword + '\n')
-            }
-          /* falls through */
-          default:
-            console.log('controlData: ' + controlData)
-        }
-      })
       socket.on('resize', function socketOnResize (data) {
         stream.setWindow(data.rows, data.cols)
       })

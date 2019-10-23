@@ -34,6 +34,7 @@
     "express": "~4.16.4",
     "express-session": "~1.15.6",
     "morgan": "~1.9.1",
+    "nodemon": "^1.19.4",
     "read-config": "git+https://github.com/billchurch/nodejs-read-config.git",
     "socket.io": "~2.2.0",
     "ssh2": "~0.6.1",
@@ -46,7 +47,7 @@
     "builddev": "webpack --progress --colors --config scripts/webpack.dev.js",
     "analyze": "webpack --json --config scripts/webpack.prod.js | webpack-bundle-size-analyzer",
     "test": "snyk test",
-    "watch": "nodemon index.js",
+    "watch": "nodemon index.js --port=$PORT",
     "standard": "standard --verbose --fix | snazzy",
     "cleanmac": "find . -name '.DS_Store' -type f -delete"
   },

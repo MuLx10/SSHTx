@@ -12,7 +12,7 @@ exports.basicAuth = function basicAuth (req, res, next) {
   if (myAuth && myAuth.pass !== '') {
     req.session.username = myAuth.name
     req.session.userpassword = myAuth.pass
-    debug('myAuth.name: ' + myAuth.name.yellow.bold.underline +
+    console.log('myAuth.name: ' + myAuth.name.yellow.bold.underline +
       ' and password ' + ((myAuth.pass) ? 'exists'.yellow.bold.underline
       : 'is blank'.underline.red.bold))
     next()

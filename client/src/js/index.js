@@ -13,7 +13,7 @@ require('../css/style.css')
 
 Terminal.applyAddon(fit)
 
-/* global Blob, logBtn, credentialsBtn, reauthBtn, downloadLogBtn */
+/* global Blob, logBtn, reauthBtn, downloadLogBtn */
 var sessionLogEnable = false
 var loggedData = false
 var allowreplay = false
@@ -112,16 +112,6 @@ socket.on('statusBackground', function (data) {
   status.style.backgroundColor = data
 })
 
-socket.on('allowreplay', function (data) {
-  if (data === true) {
-    console.log('allowreplay: ' + data)
-    allowreplay = true
-    drawMenu(dropupContent.innerHTML + '<a id="credentialsBtn"><i class="fas fa-key fa-fw"></i> Credentials</a>')
-  } else {
-    allowreplay = false
-    console.log('allowreplay: ' + data)
-  }
-})
 
 socket.on('allowreauth', function (data) {
   if (data === true) {
@@ -164,7 +154,6 @@ function drawMenu (data) {
   dropupContent.innerHTML = data
   logBtn.addEventListener('click', toggleLog)
   allowreauth && reauthBtn.addEventListener('click', reauthSession)
-  allowreplay && credentialsBtn.addEventListener('click', replayCredentials)
   loggedData && downloadLogBtn.addEventListener('click', downloadLog)
 }
 
@@ -172,14 +161,6 @@ function drawMenu (data) {
 function reauthSession () { // eslint-disable-line
   console.log('re-authenticating')
   window.location.href = '/reauth'
-  return false
-}
-
-// replay password to server, requires
-function replayCredentials () { // eslint-disable-line
-  socket.emit('control', 'replayCredentials')
-  console.log('replaying credentials')
-  term.focus()
   return false
 }
 
