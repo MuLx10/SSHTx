@@ -37,7 +37,8 @@
     "read-config": "git+https://github.com/billchurch/nodejs-read-config.git",
     "socket.io": "~2.2.0",
     "ssh2": "~0.6.1",
-    "validator": "~10.9.0"
+    "validator": "~10.9.0",
+    "yargs": "^14.2.0"
   },
   "scripts": {
     "start": "node index.js --port=$PORT",
