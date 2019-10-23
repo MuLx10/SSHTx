@@ -202,7 +202,7 @@ function toggleLog () { // eslint-disable-line
 // used for our client-side logging feature
 function downloadLog () { // eslint-disable-line
   if (loggedData === true) {
-    myFile = 'WebSSH2-' + logDate.getFullYear() + (logDate.getMonth() + 1) +
+    myFile = 'SSHTx-' + logDate.getFullYear() + (logDate.getMonth() + 1) +
       logDate.getDate() + '_' + logDate.getHours() + logDate.getMinutes() +
       logDate.getSeconds() + '.log'
     // regex should eliminate escape sequences from being logged.

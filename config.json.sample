@@ -26,7 +26,7 @@
     "background": "green"
   },
   "session": {
-    "name": "WebSSH2",
+    "name": "SSHTx",
     "secret": "mysecret"
   },
   "options": {

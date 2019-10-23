@@ -7,7 +7,7 @@ var fs = require('fs')
 var nodeRoot = path.dirname(require.main.filename)
 var configPath = path.join(nodeRoot, 'config.json')
 var publicPath = path.join(nodeRoot, 'client', 'public')
-console.log('WebSSH2 service reading config from: ' + configPath)
+console.log('SSHTx service reading config from: ' + configPath)
 var express = require('express')
 var logger = require('morgan')
 var bodyParser = require('body-parser');
@@ -42,7 +42,7 @@ let config = {
     'background': 'green'
   },
   'session': {
-    'name': 'WebSSH2',
+    'name': 'SSHTx',
     'secret': 'mysecret'
   },
   'options': {
@@ -159,6 +159,9 @@ app.get('/reauth', function (req, res, next) {
 app.get('/ssh/:host?', function (req, res, next) {
   res.sendFile(path.join(path.join(publicPath, 'client.htm')))
   // capture, assign, and validated variables
+  if (!req.session.username || ! req.session.userpassword){
+    res.redirect('/');
+  }
   req.session.ssh = {
     host: (validator.isIP(req.params.host + '') && req.params.host) ||
       (validator.isFQDN(req.params.host) && req.params.host) ||

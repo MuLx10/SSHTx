@@ -4,7 +4,7 @@
 
 // private
 var debug = require('debug')
-var debugWebSSH2 = require('debug')('WebSSH2')
+var debugSSHTx = require('debug')('SSHTx')
 var SSH = require('ssh2').Client
 // var fs = require('fs')
 // var hostkeys = JSON.parse(fs.readFileSync('./hostkeyhashes.json', 'utf8'))
@@ -17,7 +17,7 @@ module.exports = function socket (socket) {
   // if websocket connection arrives without an express session, kill it
   if (!socket.request.session) {
     socket.emit('401 UNAUTHORIZED')
-    debugWebSSH2('SOCKET: No Express Session / REJECTED')
+    debugSSHTx('SOCKET: No Express Session / REJECTED')
     socket.disconnect(true)
     return
   }
@@ -33,7 +33,7 @@ module.exports = function socket (socket) {
   })
 
   conn.on('ready', function connOnReady () {
-    console.log('WebSSH2 Login: user=' + socket.request.session.username + ' from=' + socket.handshake.address + ' host=' + socket.request.session.ssh.host + ' port=' + socket.request.session.ssh.port + ' sessionID=' + socket.request.sessionID + '/' + socket.id + ' mrhsession=' + socket.request.session.ssh.mrhsession + ' allowreplay=' + socket.request.session.ssh.allowreplay + ' term=' + socket.request.session.ssh.term)
+    console.log('SSHTx Login: user=' + socket.request.session.username + ' from=' + socket.handshake.address + ' host=' + socket.request.session.ssh.host + ' port=' + socket.request.session.ssh.port + ' sessionID=' + socket.request.sessionID + '/' + socket.id + ' mrhsession=' + socket.request.session.ssh.mrhsession + ' allowreplay=' + socket.request.session.ssh.allowreplay + ' term=' + socket.request.session.ssh.term)
     socket.emit('menu', menuData)
     socket.emit('allowreauth', socket.request.session.ssh.allowreauth)
     socket.emit('setTerminalOpts', socket.request.session.ssh.terminal)
@@ -71,9 +71,9 @@ module.exports = function socket (socket) {
       socket.on('resize', function socketOnResize (data) {
         stream.setWindow(data.rows, data.cols)
       })
-      socket.on('disconnecting', function socketOnDisconnecting (reason) { debugWebSSH2('SOCKET DISCONNECTING: ' + reason) })
+      socket.on('disconnecting', function socketOnDisconnecting (reason) { debugSSHTx('SOCKET DISCONNECTING: ' + reason) })
       socket.on('disconnect', function socketOnDisconnect (reason) {
-        debugWebSSH2('SOCKET DISCONNECT: ' + reason)
+        debugSSHTx('SOCKET DISCONNECT: ' + reason)
         err = { message: reason }
         SSHerror('CLIENT SOCKET DISCONNECT', err)
         conn.end()
@@ -100,7 +100,7 @@ module.exports = function socket (socket) {
   conn.on('close', function connOnClose (err) { SSHerror('CONN CLOSE', err) })
   conn.on('error', function connOnError (err) { SSHerror('CONN ERROR', err) })
   conn.on('keyboard-interactive', function connOnKeyboardInteractive (name, instructions, instructionsLang, prompts, finish) {
-    debugWebSSH2('conn.on(\'keyboard-interactive\')')
+    debugSSHTx('conn.on(\'keyboard-interactive\')')
     finish([socket.request.session.userpassword])
   })
   if (socket.request.session.username && socket.request.session.userpassword && socket.request.session.ssh) {
@@ -118,7 +118,7 @@ module.exports = function socket (socket) {
       debug: debug('ssh2')
     })
   } else {
-    debugWebSSH2('Attempt to connect without session.username/password or session varialbles defined, potentially previously abandoned client session. disconnecting websocket client.\r\nHandshake information: \r\n  ' + JSON.stringify(socket.handshake))
+    debugSSHTx('Attempt to connect without session.username/password or session varialbles defined, potentially previously abandoned client session. disconnecting websocket client.\r\nHandshake information: \r\n  ' + JSON.stringify(socket.handshake))
     socket.emit('ssherror', 'WEBSOCKET ERROR - Refresh the browser and try again')
     socket.request.session.destroy()
     socket.disconnect(true)
@@ -138,16 +138,16 @@ module.exports = function socket (socket) {
       theError = (socket.request.session.error) ? ': ' + socket.request.session.error : ''
       // log unsuccessful login attempt
       if (err && (err.level === 'client-authentication')) {
-        console.log('WebSSH2 ' + 'error: Authentication failure'.red.bold +
+        console.log('SSHTx ' + 'error: Authentication failure'.red.bold +
           ' user=' + socket.request.session.username.yellow.bold.underline +
           ' from=' + socket.handshake.address.yellow.bold.underline)
         socket.emit('allowreauth', socket.request.session.ssh.allowreauth)
         socket.emit('reauth')
       } else {
-        console.log('WebSSH2 Logout: user=' + socket.request.session.username + ' from=' + socket.handshake.address + ' host=' + socket.request.session.ssh.host + ' port=' + socket.request.session.ssh.port + ' sessionID=' + socket.request.sessionID + '/' + socket.id + ' allowreplay=' + socket.request.session.ssh.allowreplay + ' term=' + socket.request.session.ssh.term)
+        console.log('SSHTx Logout: user=' + socket.request.session.username + ' from=' + socket.handshake.address + ' host=' + socket.request.session.ssh.host + ' port=' + socket.request.session.ssh.port + ' sessionID=' + socket.request.sessionID + '/' + socket.id + ' allowreplay=' + socket.request.session.ssh.allowreplay + ' term=' + socket.request.session.ssh.term)
         if (err) {
           theError = (err) ? ': ' + err.message : ''
-          console.log('WebSSH2 error' + theError)
+          console.log('SSHTx error' + theError)
         }
       }
       socket.emit('ssherror', 'SSH ' + myFunc + theError)
@@ -157,6 +157,6 @@ module.exports = function socket (socket) {
       theError = (err) ? ': ' + err.message : ''
       socket.disconnect(true)
     }
-    debugWebSSH2('SSHerror ' + myFunc + theError)
+    debugSSHTx('SSHerror ' + myFunc + theError)
   }
 }

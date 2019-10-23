@@ -1,18 +1,18 @@
 {
-  "name": "webssh2",
+  "name": "SSHTx",
   "version": "0.2.9",
   "ignore": [
     ".gitignore"
   ],
   "bin": "./index.js",
   "description": "A Websocket to SSH2 gateway using term.js, socket.io, ssh2, and express",
-  "homepage": "https://github.com/billchurch/WebSSH2",
+  "homepage": "https://github.com/billchurch/SSHTx",
   "keywords": "ssh webssh terminal webterminal",
   "license": "SEE LICENSE IN FILE - LICENSE",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/billchurch/WebSSH2.git"
+    "url": "git+https://github.com/billchurch/SSHTx.git"
   },
   "contributors": [
     {
@@ -24,7 +24,7 @@
     "node": ">= 6"
   },
   "bugs": {
-    "url": "https://github.com/billchurch/WebSSH2/issues"
+    "url": "https://github.com/billchurch/SSHTx/issues"
   },
   "dependencies": {
     "basic-auth": "~2.0.1",
@@ -54,7 +54,7 @@
   },
   "standard": {
     "ignore": [
-      "client/public/webssh2.bundle.js",
+      "client/public/SSHTx.bundle.js",
       "bigip/*",
       "screenshots/*",
       "bin/*",
